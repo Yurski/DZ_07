@@ -34,8 +34,7 @@ class Grade(Base):
     student_id = Column(Integer, ForeignKey('students.id'))
     subject_id = Column(Integer, ForeignKey('subjects.id'))
     grade = Column(Float, nullable=False)
-    date_received = Column(String(20), nullable=False)  # Assuming date_received is stored as a string
-
+    date_received = Column(String(20), nullable=False)  
 
 engine = create_engine('sqlite:///school.db')
 
