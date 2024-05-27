@@ -7,7 +7,8 @@ from datetime import datetime, timedelta
 
 fake = Faker()
 
-DB_URL = "postgresql://postgres:12345@localhost/postgres"
+# DB_URL = "postgresql://postgres:12345@localhost/postgres"
+DB_URL = "sqlite:///school.db" 
 engine = create_engine(DB_URL)
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -40,9 +41,9 @@ def create_grades(num_grades):
     for _ in range(num_grades):
         student = choice(students)
         subject = choice(subjects)
-        grade = randint(1, 10)
+        grade_value = randint(1, 10)
         date_received = fake.date_time_between(start_date='-1y', end_date='now')
-        grade_entry = Grade(student=student, subject=subject, grade=grade, date_received=date_received)
+        grade_entry = Grade(student_id=student.id, subject_id=subject.id, grade=grade_value, date_received=date_received)
         session.add(grade_entry)
 
 if __name__ == '__main__':

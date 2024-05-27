@@ -13,13 +13,86 @@ def select_2(subject_name):
                     .order_by(func.avg(Grade.grade).desc()).first()
     return result
 
+# def select_3(subject_name):
+#     result = session.query(Group.name, func.round(func.avg(Grade.grade), 2).label('avg_grade'))\
+#                     .join(Student).join(Grade, Grade.student_id == Student.id)\
+#                     .join(Subject, Subject.id == Grade.subject_id)\
+#                     .filter(Subject.name == subject_name)\
+#                     .group_by(Group.id).all()
+#     return result
+
+# def select_3(subject_name):
+#     query = (
+#         session.query(Group.name, func.round(func.avg(Grade.grade), 2).label('avg_grade'))
+#         .join(Grade, Group.id == Grade.group_id)
+#         .join(Subject, Subject.id == Grade.subject_id)
+#         .filter(Subject.name == subject_name)
+#         .group_by(Group.id)
+#         .all()
+#     )
+#     return query
+
+# def select_3(subject_name):
+#     query = (
+#         session.query(Group.name, func.round(func.avg(Grade.grade), 2).label('avg_grade'))
+#         .join(Student, Group.id == Student.group_id)
+#         .join(Grade, Student.id == Grade.student_id)
+#         .join(Subject, Subject.id == Grade.subject_id)
+#         .filter(Subject.name == subject_name)
+#         .group_by(Group.id)
+#         .all()
+#     )
+#     return query
+
+# def select_3(subject_name):
+#     query = (
+#         session.query(Group.name, func.round(func.avg(Grade.grade), 2).label('avg_grade'))
+#         .join(Group.students)
+#         .join(Student.grades)
+#         .join(Grade.subject)
+#         .filter(Subject.name == subject_name)
+#         .group_by(Group.id)
+#         .all()
+#     )
+#     return query
+
+# def select_3(subject_name):
+#     query = (
+#         session.query(Group.name, func.round(func.avg(Grade.grade), 2).label('avg_grade'))
+#         .join(Group.students)
+#         .join(Student.grades)
+#         .join(Grade.subject)
+#         .filter(Subject.name == subject_name)
+#         .group_by(Group.id)
+#         .all()
+#     )
+#     return query
+
+# def select_3(subject_name):
+#     query = (
+#         session.query(Student.fullname, func.round(func.avg(Grade.grade), 2).label('avg_grade'))
+#         .join(Grade)
+#         .join(Subject)
+#         .join(Group)  # Додаємо посилання на Group через Grade
+#         .filter(Subject.name == subject_name)
+#         .group_by(Student.fullname)
+#         .all()
+#     )
+#     return query
+
 def select_3(subject_name):
-    result = session.query(Group.name, func.round(func.avg(Grade.grade), 2).label('avg_grade'))\
-                    .join(Student).join(Grade, Grade.student_id == Student.id)\
-                    .join(Subject, Subject.id == Grade.subject_id)\
-                    .filter(Subject.name == subject_name)\
-                    .group_by(Group.id).all()
-    return result
+    query = (
+        session.query(Group.name, func.round(func.avg(Grade.grade), 2).label('avg_grade'))
+        .select_from(Group)
+        .join(Student, Student.group_id == Group.id)
+        .join(Grade, Grade.student_id == Student.id)
+        .join(Subject, Subject.id == Grade.subject_id)
+        .filter(Subject.name == subject_name)
+        .group_by(Group.name)
+        .all()
+    )
+    return query
+
 
 
 def select_4():
@@ -54,24 +127,24 @@ def select_10(student_name, teacher_name):
     return result
 
 if __name__ == "__main__":
-    print("Top 5 students with highest average grades:")
+    print("5 студентів із найбільшим середнім балом з всіх предметів:")
     print(select_1())
-    print("\nStudent with highest average grade in a specific subject:")
-    print(select_2())
-    print("\nAverage grade for groups in a specific subject:")
-    print(select_3())
-    print("\nAverage grade across all subjects:")
+    print("Студент із найвищим середнім балом з певного предмета:")
+    print(select_2("Math"))
+    print("Середній бал в групах з певного предмета:")
+    print(select_3("Physics"))
+    print("Середній бал на потоці:")
     print(select_4())
-    print("\nCourses taught by a specific teacher:")
-    print(select_5())
-    print("\nList of students in a specific group:")
-    print(select_6())
-    print("\nGrades of students in a specific group for a specific subject:")
-    print(select_7())
-    print("\nAverage grade given by a specific teacher across their subjects:")
-    print(select_8())
-    print("\nCourses attended by a specific student:")
-    print(select_9())
-    print("\nCourses taught to a specific student by a specific teacher:")
-    print(select_10())
+    print("Курси читає певний викладач:")
+    print(select_5("John Doe"))
+    print("Список студентів в певній групі:")
+    print(select_6("Group 1"))
+    print("Оцінки студентів в окремій групі з певного предмета:")
+    print(select_7("Group 2", "Chemistry"))
+    print("Середній бал, який ставить певний викладач зі своїх предметів:")
+    print(select_8("Jane Smith"))
+    print("Список курсів, які відвідує певний студент:")
+    print(select_9("Alice Johnson"))
+    print("Список курсів, які певному студенту читає певний викладач:")
+    print(select_10("Bob Brown", "Jane Smith"))
 

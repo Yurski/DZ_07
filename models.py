@@ -1,20 +1,41 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Float
-from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import declarative_base
+
 
 Base = declarative_base()
+
+# class Student(Base):
+#     __tablename__ = 'students'
+#     id = Column(Integer, primary_key=True)
+#     fullname = Column(String)
+
+#     grades = relationship('Grade', back_populates='student')
 
 class Student(Base):
     __tablename__ = 'students'
     id = Column(Integer, primary_key=True)
     fullname = Column(String)
+    group_id = Column(Integer, ForeignKey('groups.id'))
 
+    group = relationship('Group', back_populates='students')
     grades = relationship('Grade', back_populates='student')
+
+
+
+# class Group(Base):
+#     __tablename__ = 'groups'
+#     id = Column(Integer, primary_key=True)
+#     name = Column(String)
 
 class Group(Base):
     __tablename__ = 'groups'
     id = Column(Integer, primary_key=True)
     name = Column(String)
+
+    students = relationship('Student', back_populates='group')
+
 
 class Teacher(Base):
     __tablename__ = 'teachers'
