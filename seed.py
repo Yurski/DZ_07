@@ -2,7 +2,7 @@ from faker import Faker
 from random import randint, choice
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db import Student, Group, Teacher, Subject, Grade
+from app.models import Student, Group, Teacher, Subject, Grade
 from datetime import datetime, timedelta
 
 fake = Faker()
@@ -14,10 +14,10 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 def create_students(num_students):
-    for _ in range(num_students):
-        student = Student(fullname=fake.name())
+    for i in range(num_students):
+        student = Student(fullname=fake.name(),group_id=randint(1,3))
         session.add(student)
-
+        
 def create_groups(num_groups):
     for i in range(num_groups):
         group = Group(name=f'Group {i+1}')
@@ -47,8 +47,8 @@ def create_grades(num_grades):
         session.add(grade_entry)
 
 if __name__ == '__main__':
-    create_students(50)
     create_groups(3)
+    create_students(50)
     create_teachers(5)
     create_subjects(8)
     create_grades(20)
